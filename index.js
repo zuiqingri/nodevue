@@ -79,7 +79,8 @@ io.sockets.on('connection', (socket, opt) => {
   });
 
   socket.on('message-for-one', (socketid, msg, fn) => {
-    socket.broadcast.to(socketid).emit('message', {msg: msg});
+    // socket.broadcast.to(socketid).emit('message', {msg: msg});
+    socket.to(socketid).emit('message', {msg: msg});
   });
 
   socket.on('disconnecting', function(data) {
