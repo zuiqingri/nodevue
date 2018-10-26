@@ -1,44 +1,12 @@
 <template>
   <div id="app">
-    <h1>{{ttt}} :: <span v-if="isVisible">{{visit}}</span></h1>
-    <h2 v-bind:class={red:isVisible}>{{tttVisit}}</h2>
-    <input type="text" @keyup="visit++" v-model="ttt">
-    <button @click="visitCount()">Visit Count</button>
-
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div id="nav">
+      <router-link to="/">Home</router-link> |
+      <router-link to="/about">About</router-link>
+    </div>
+    <router-view/>
   </div>
 </template>
-
-<script>
-import HelloWorld from './components/HelloWorld.vue'
-
-export default {
-  name: 'app',
-  components: {
-    HelloWorld
-  },
-  data() {
-    return {
-      ttt: '홍길동',
-      visit: 0,
-      isVisible: false,
-      color: 'red'
-    }
-  },
-  methods: {
-    visitCount() {
-      this.visit++;
-      this.isVisible = true;
-    }
-  },
-  computed: {
-    tttVisit() {
-      return 'Hi~ ' + this.ttt + ' You are ' + this.visit + " Times Visited."
-    }
-  }
-}
-</script>
 
 <style>
 #app {
