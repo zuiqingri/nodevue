@@ -1,5 +1,15 @@
 <template>
   <div class="home">
+    <h1 class="red">{{jsonData.msg}}</h1>
+    <Brother :msg="jsonData.msg" @fromBrother="fromBrother" />
+    <Sister :msg="jsonData.msg" @fromSister="fromSister" />
+
+    <ul>
+      <li v-for="reply in replies">
+        {{reply.rno}}. <input type="text" v-model="reply.replytext">
+        <button @click.prevent="saveReply(reply)">Save</button>
+      </li>
+    </ul>
     <img alt="Vue logo" src="../assets/logo.png">
 
     <span v-once>메시지: {{ msg }}</span>
@@ -21,7 +31,7 @@
                :key="item.id">
     </todo-item>
 
-    <todo-item :todo="groceryList[0]"></todo-item>
+    <TodoItem :todo="groceryList[0]"/>
     <todo-item :todo="{id:9999, text: '999999'}"></todo-item>
 
     <HelloWorld v-if="isButtonDisabled" msg="Welcome to Your Vue.js App"/>
@@ -30,14 +40,17 @@
 </template>
 
 <script>
-// @ is an alias to /src
-// import HelloWorld from '@/components/HelloWorld.vue'
-import TodoItem from '@/components/todo-item'
-
 export default {
   name: 'home',
-  components: {
-    TodoItem
+  // components: {
+  //   TodoItem, Brother, Sister
+  // },
+
+  created() {
+    console.log(">>>>>>>", this._.random(30))
+    this.fetchReplies();
+    // this.$watch('ttt', this._.debounce(this.aaa, 1000))
+    // this.$watch('ttt', this.aaa)
   },
 
   computed: {
@@ -57,6 +70,32 @@ export default {
   },
 
   methods: {
+    fromBrother(newMsg) {
+      console.log("fromBrother>>>>>", ...arguments)
+      this.jsonData.msg = this.sister(newMsg);
+    },
+
+    fromSister(newMsg) {
+      console.log("fromSister>>>>>", ...arguments)
+      this.jsonData.msg = sister(newMsg);
+    },
+
+    saveReply(reply) {
+      this.$http.put('http://localhost:7000/apis/replies/265/' + reply.rno, reply).then( ret => {
+        console.log("saveReply.ret>>", ret)
+        if (ret.status !== 200) return [];
+        alert(ret.data + '개의 댓글이 수정되었습니다.');
+      });
+    },
+    fetchReplies() {
+      this.$http.get('http://localhost:7000/apis/replies/265').then( ret => {
+        if (ret.status !== 200) return [];
+
+        console.log("replies.ret>>", ret)
+        this.replies = ret.data;
+      });
+    },
+
     aaa(e) {
       console.log("aaaaaaaaaaaaaaaaaaa", e)
     },
@@ -68,8 +107,11 @@ export default {
 
   data() {
     return {
+      jsonData: {msg: 'message', id: 123},
+      ttt: 'ttt',
       msg: 'abcd',
       isButtonDisabled: false,
+      replies: [],
       groceryList: [
         { id: 0, text: 'Vegetables' },
         { id: 1, text: 'Cheese' },
