@@ -1,16 +1,15 @@
-const ogs = require('open-graph-scraper'),
-      HashMap = require('hashmap'),
-      Crypto = require('crypto-js'),
-      SHA256 = ("crypto-js/sha256");
+const ogs = require("open-graph-scraper"),
+  HashMap = require("hashmap"),
+  Crypto = require("crypto-js"),
+  SHA256 = "crypto-js/sha256";
 
 const EKey = "nodevue";
 
 module.exports = {
-
   makeMap(key, value) {
     const map = new HashMap();
     map.set(key, value);
-    console.log("TTT>>", map.get(key))
+    console.log("TTT>>", map.get(key));
     return map;
   },
 
@@ -19,9 +18,7 @@ module.exports = {
     key = key || EKey;
 
     try {
-
       return Crypto.SHA256(data + key).toString();
-
     } catch (err) {
       console.error("Error on encryptSha2::", err);
     }
@@ -36,9 +33,8 @@ module.exports = {
   },
 
   ogsinfo(url, fn) {
-    return ogs({url: url}, (err, ret) => {
+    return ogs({ url: url }, (err, ret) => {
       fn(err, ret);
     });
-  }
-
+  },
 };

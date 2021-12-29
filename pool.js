@@ -1,19 +1,19 @@
-const mysql   = require("mysql"),
-      util    = require('util'),
-      Promise = require("bluebird");
+const mysql = require("mysql"),
+  util = require("util"),
+  Promise = require("bluebird");
 
 Promise.promisifyAll(mysql);
 Promise.promisifyAll(require("mysql/lib/Connection").prototype);
 Promise.promisifyAll(require("mysql/lib/Pool").prototype);
 
 const DB_INFO = {
-  host     : '115.71.233.22',
-  user     : 'testuser',
-  password : 'testuser!@#',
-  database : 'testdb',
+  host: "127.0.0.1",
+  user: "root",
+  password: "",
+  database: "login_lecture",
   multipleStatements: true,
-  connectionLimit:5,
-  waitForConnections:false
+  connectionLimit: 5,
+  waitForConnections: false,
 };
 
 module.exports = class {
@@ -23,18 +23,15 @@ module.exports = class {
   }
 
   connect() {
-    return this.pool.getConnectionAsync().disposer(conn => {
+    return this.pool.getConnectionAsync().disposer((conn) => {
       return conn.release();
     });
   }
 
   end() {
-    this.pool.end( function(err) {
+    this.pool.end(function (err) {
       util.log(">>>>>>>>>>>>>>>>>>>>>>>>>>> End of Pool!!");
-      if (err)
-        util.log("ERR pool ending!!");
+      if (err) util.log("ERR pool ending!!");
     });
   }
 };
-
-

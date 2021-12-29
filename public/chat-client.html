@@ -93,10 +93,10 @@
   function makeJoin(roomid) {
     console.log("makeJoin>>", roomid)
     socket.emit('join', roomid, () => {
-      console.log("joinedRoom>>", joinedRoom)
       socket.emit('leave', joinedRoom);
       joinedRoom = roomid;
       $('#status').text("Joined : " + joinedRoom)
+      console.log("joinedRoom>>", joinedRoom)
       displayRooms();
     });
   }
